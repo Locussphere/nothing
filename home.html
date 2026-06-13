@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Mods — Locusphere</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── SEARCH BAR ── */
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(17, 27, 46, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(100, 180, 255, 0.15);
+      border-radius: 10px;
+      padding: 12px 18px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] .search-box {
+      background: rgba(255, 255, 255, 0.6);
+      border-color: rgba(60, 100, 180, 0.15);
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(74, 240, 196, 0.12);
+    }
+
+    [data-theme="light"] .search-box:focus-within {
+      box-shadow: 0 0 0 4px rgba(13, 122, 95, 0.12);
+    }
+
+    .search-box input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .search-box input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-icon {
+      color: var(--muted);
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    /* ── CATEGORIES ── */
+    .cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .cat-btn {
+      padding: 8px 20px;
+      border-radius: 100px;
+      border: 1px solid rgba(100, 180, 255, 0.15);
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      font-size: 12px;
+      color: var(--text2);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] .cat-btn {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: rgba(60, 100, 180, 0.15);
+    }
+
+    .cat-btn:hover,
+    .cat-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(74, 240, 196, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(74, 240, 196, 0.15);
+    }
+
+    [data-theme="light"] .cat-btn:hover,
+    [data-theme="light"] .cat-btn.active {
+      background: rgba(13, 122, 95, 0.08);
+      box-shadow: 0 4px 14px rgba(13, 122, 95, 0.15);
+    }
+
+    /* ── MOD GRID ── */
+    .mod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="starfield"></div>
+  <div class="grid-bg"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">
+      <svg class="nav-logo-icon" viewBox="0 0 30 30" fill="none">
+        <circle cx="15" cy="15" r="13" stroke="var(--accent)" stroke-width="1.5" />
+        <circle cx="15" cy="15" r="5" fill="var(--accent)" opacity="0.2" />
+        <circle cx="15" cy="15" r="2.5" fill="var(--accent)" />
+        <ellipse cx="15" cy="15" rx="13" ry="4.5" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 2.5"
+          opacity="0.45" />
+      </svg>
+      Locusphere
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="home.html" class="active" style="color:var(--accent);">Browse</a></li>
+      <li><a href="index.html#features">Features</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">☀️</button>
+    </div>
+  </nav>
+
+  <!-- BROWSE CONTENT -->
+  <main style="padding-top: 120px; min-height: 90vh;">
+    <section class="section" id="browse">
+      <div class="container">
+        <div class="section-label reveal">Catalog</div>
+        <h1 class="section-title reveal">All Mods</h1>
+        <p class="section-desc reveal">Every mod on Locusphere. Search and filter to find exactly what you need.</p>
+
+        <div class="search-row reveal">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search mods, games, authors…" />
+          </div>
+        </div>
+
+        <div class="cats reveal" id="catRow">
+          <button class="cat-btn active" data-cat="All">All</button>
+          <button class="cat-btn" data-cat="Visual">Visual</button>
+          <button class="cat-btn" data-cat="Gameplay">Gameplay</button>
+          <button class="cat-btn" data-cat="Maps">Maps</button>
+          <button class="cat-btn" data-cat="Skyrim">Skyrim</button>
+          <button class="cat-btn" data-cat="Minecraft">Minecraft</button>
+          <button class="cat-btn" data-cat="Elden Ring">Elden Ring</button>
+          <button class="cat-btn" data-cat="RimWorld">RimWorld</button>
+        </div>
+
+        <div class="mod-grid" id="modGrid">
+          <!-- populated by JS -->
+        </div>
+
+        <div id="loadMoreWrap" class="reveal" style="text-align: center; margin-top: 40px; display: none;">
+          <button id="loadMoreBtn" class="cat-btn" style="padding: 12px 30px; font-size: 14px;">Load More Mods ↓</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">⊙ Locusphere</div>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="home.html">Browse</a></li>
+        <li><a href="index.html#submit">Submit a Mod</a></li>
+      </ul>
+      <div class="footer-copy">© 2026 Locusphere · Curated with ♥</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    let activeCat = 'All';
+    let searchQ = '';
+
+    async function initBrowse() {
+      await loadMods();
+      renderMods(MODS);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initBrowse();
+
+      // Search
+      document.getElementById('searchInput')?.addEventListener('input', e => {
+        searchQ = e.target.value;
+        renderMods(filterMods(searchQ, activeCat));
+      });
+
+      // Category buttons
+      document.getElementById('catRow')?.addEventListener('click', e => {
+        const btn = e.target.closest('.cat-btn');
+        if (!btn) return;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCat = btn.dataset.cat;
+        renderMods(filterMods(searchQ, activeCat));
+      });
+    });
+  </script>
+</body>
+
+</html>
